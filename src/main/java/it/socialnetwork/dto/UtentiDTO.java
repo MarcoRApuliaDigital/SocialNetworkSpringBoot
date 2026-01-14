@@ -1,5 +1,6 @@
 package it.socialnetwork.dto;
 
+import it.socialnetwork.enums.SessoEnum;
 import lombok.Data;
 
 @Data
@@ -9,6 +10,6 @@ public class UtentiDTO {
     private String nome;
     private String cognome;
     private String email;
-    private String sesso;
+    private SessoEnum sesso;
     private String dataNascita; // String per JSON
 }
