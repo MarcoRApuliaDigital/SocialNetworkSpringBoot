@@ -8,6 +8,7 @@ import it.socialnetwork.entity.UtentiEntity;
 import it.socialnetwork.repository.ContenutiPostRepository;
 import it.socialnetwork.repository.PostRepository;
 import it.socialnetwork.repository.UtentiRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class PostService {
 
 
     // Crea un nuovo post con contenuti
-
+    @Transactional
     public PostDTO creaPost(Long idUtente, PostDTO postDTO) {
         UtentiEntity utente = utentiRepository.findById(idUtente)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
