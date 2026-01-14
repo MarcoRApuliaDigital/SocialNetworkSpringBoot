@@ -4,8 +4,10 @@ import it.socialnetwork.dto.CredenzialiDTO;
 import it.socialnetwork.dto.UtentiDTO;
 import it.socialnetwork.entity.CredenzialiEntity;
 import it.socialnetwork.entity.UtentiEntity;
+import it.socialnetwork.enums.SessoEnum;
 import it.socialnetwork.repository.CredenzialiRepository;
 import it.socialnetwork.repository.UtentiRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +27,13 @@ public class UtentiService {
     // @param utentiDTO dati dell'utente
     // @param credenzialiDTO username e password
     // @return DTO dell'utente registrato con ID
-
+    @Transactional
     public UtentiDTO registraUtente(UtentiDTO utentiDTO, CredenzialiDTO credenzialiDTO) {
         UtentiEntity utente = new UtentiEntity();
         utente.setNome(utentiDTO.getNome());
         utente.setCognome(utentiDTO.getCognome());
         utente.setEmail(utentiDTO.getEmail());
-        utente.setSesso(utentiDTO.getSesso());
+        utente.setSesso(SessoEnum.valueOf(utentiDTO.getSesso()));
         utente.setDataNascita(LocalDate.parse(utentiDTO.getDataNascita()));
         utente.setDataCreazione(LocalDateTime.now());
 

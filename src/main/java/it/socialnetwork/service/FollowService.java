@@ -20,7 +20,7 @@ public class FollowService {
     private final UtentiRepository utentiRepository;
 
 
-     // Segui un utente
+    // Segui un utente
 
     public FollowDTO seguiUtente(Long followerId, Long seguendoId) {
         UtentiEntity follower = utentiRepository.findById(followerId)

@@ -1,5 +1,6 @@
 package it.socialnetwork.entity;
 
+import it.socialnetwork.enums.SessoEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,8 @@ public class UtentiEntity {
     private String cognome;
     private String email;
     private LocalDate dataNascita;
-    private String sesso;
+    @Enumerated(EnumType.STRING)
+    private SessoEnum sesso;
     private LocalDateTime dataCreazione;
 
     @OneToOne(mappedBy = "utente", cascade = CascadeType.ALL)
