@@ -4,7 +4,6 @@ import it.socialnetwork.dto.CredenzialiDTO;
 import it.socialnetwork.dto.UtentiDTO;
 import it.socialnetwork.entity.CredenzialiEntity;
 import it.socialnetwork.entity.UtentiEntity;
-import it.socialnetwork.enums.SessoEnum;
 import it.socialnetwork.repository.CredenzialiRepository;
 import it.socialnetwork.repository.UtentiRepository;
 import jakarta.transaction.Transactional;
@@ -33,7 +32,7 @@ public class UtentiService {
         utente.setNome(utentiDTO.getNome());
         utente.setCognome(utentiDTO.getCognome());
         utente.setEmail(utentiDTO.getEmail());
-        utente.setSesso(SessoEnum.valueOf(utentiDTO.getSesso()));
+        utente.setSesso(utentiDTO.getSesso());
         utente.setDataNascita(LocalDate.parse(utentiDTO.getDataNascita()));
         utente.setDataCreazione(LocalDateTime.now());
 
