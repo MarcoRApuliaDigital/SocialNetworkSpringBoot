@@ -4,6 +4,7 @@ import it.socialnetwork.dto.CredenzialiDTO;
 import it.socialnetwork.dto.UtentiDTO;
 import it.socialnetwork.entity.CredenzialiEntity;
 import it.socialnetwork.entity.UtentiEntity;
+import it.socialnetwork.mapper.UtentiMapper;
 import it.socialnetwork.repository.CredenzialiRepository;
 import it.socialnetwork.repository.UtentiRepository;
 import jakarta.transaction.Transactional;
@@ -20,6 +21,7 @@ public class UtentiService {
 
     private final UtentiRepository utentiRepository;
     private final CredenzialiRepository credenzialiRepository;
+    private final UtentiMapper utentiMapper;
 
 
     // Registra un nuovo utente con le credenziali.
@@ -28,12 +30,17 @@ public class UtentiService {
     // @return DTO dell'utente registrato con ID
     @Transactional
     public UtentiDTO registraUtente(UtentiDTO utentiDTO, CredenzialiDTO credenzialiDTO) {
+
+        //esempio
+
+        UtentiEntity utenteMapper = utentiMapper.toEntity(utentiDTO);
+
         UtentiEntity utente = new UtentiEntity();
         utente.setNome(utentiDTO.getNome());
         utente.setCognome(utentiDTO.getCognome());
         utente.setEmail(utentiDTO.getEmail());
         utente.setSesso(utentiDTO.getSesso());
-        utente.setDataNascita(LocalDate.parse(utentiDTO.getDataNascita()));
+        //utente.setDataNascita(LocalDate.parse(utentiDTO.getDataNascita()));
         utente.setDataCreazione(LocalDateTime.now());
 
         // Crea credenziali
@@ -44,7 +51,7 @@ public class UtentiService {
 
         utente.setCredenziali(credenziali);
 
-        utentiRepository.save(utente);
+        utentiRepository.save(utenteMapper);
 
         utentiDTO.setIdUtente(utente.getIdUtente());
         return utentiDTO;
@@ -62,7 +69,7 @@ public class UtentiService {
             dto.setCognome(u.getCognome());
             dto.setEmail(u.getEmail());
             dto.setSesso(u.getSesso());
-            dto.setDataNascita(u.getDataNascita().toString());
+            //dto.setDataNascita(u.getDataNascita().toString());
             return Optional.of(dto);
         }
         return Optional.empty();
@@ -82,7 +89,7 @@ public class UtentiService {
         dto.setCognome(u.getCognome());
         dto.setEmail(u.getEmail());
         dto.setSesso(u.getSesso());
-        dto.setDataNascita(u.getDataNascita().toString());
+       // dto.setDataNascita(u.getDataNascita().toString());
         return Optional.of(dto);
     }
 }
