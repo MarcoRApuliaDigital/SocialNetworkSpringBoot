@@ -4,9 +4,8 @@ import it.socialnetwork.dto.CommentiDTO;
 import it.socialnetwork.entity.CommentiEntity;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring",uses = {})
-
+@Mapper(componentModel = "spring")
 public interface CommentiMapper {
-    CommentiDTO toDTO (CommentiEntity CommentiEntity);
-    CommentiEntity toEntity (CommentiDTO CommentiDTO);
+    CommentiDTO toDTO(CommentiEntity commentiEntity);
+    CommentiEntity toEntity(CommentiDTO commentiDTO);
 }

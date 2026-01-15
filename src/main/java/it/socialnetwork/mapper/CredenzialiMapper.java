@@ -5,8 +5,8 @@ import it.socialnetwork.entity.CredenzialiEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-
 public interface CredenzialiMapper {
-    CredenzialiDTO toDTO (CredenzialiEntity CredenzialiEntity);
-    CredenzialiEntity toEntity (CredenzialiDTO CredenzialiDTO);
+    CredenzialiDTO toDTO(CredenzialiEntity credenzialiEntity);
+    CredenzialiEntity toEntity(CredenzialiDTO credenzialiDTO);
 }
+
