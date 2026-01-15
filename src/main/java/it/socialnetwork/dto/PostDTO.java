@@ -13,6 +13,6 @@ public class PostDTO {
     private String dataPubblicazione;
     private Integer numeroLike;
     private Integer numeroCondivisioni;
-    private List<ContenutiPostDTO> contenuti;
+    private String contenuto;
     private List<CommentiDTO> commenti;
 }

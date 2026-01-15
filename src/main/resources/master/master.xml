@@ -8,9 +8,7 @@
     <include file="master/tabelle/credenziali.xml"/>
     <include file="master/tabelle/utenti.xml"/>
     <include file="master/tabelle/post.xml"/>
-    <include file="master/tabelle/contenuti_post.xml"/>
     <include file="master/tabelle/commenti.xml"/>
-    <include file="master/tabelle/follow.xml"/>
 
 </databaseChangeLog>
 
