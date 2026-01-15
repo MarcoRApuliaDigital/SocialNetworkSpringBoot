@@ -34,12 +34,4 @@ public class UtentiEntity {
 
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
     private List<CommentiEntity> commenti;
-
-    // Utenti che seguo
-    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
-    private List<FollowEntity> following;
-
-    // Utenti che mi seguono
-    @OneToMany(mappedBy = "seguendo", cascade = CascadeType.ALL)
-    private List<FollowEntity> followers;
 }
