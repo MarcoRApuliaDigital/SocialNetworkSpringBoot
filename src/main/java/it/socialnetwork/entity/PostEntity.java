@@ -24,8 +24,9 @@ public class PostEntity {
     private Integer numeroLike;
     private Integer numeroCondivisioni;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<ContenutiPostEntity> contenuti;
+    @Column(nullable = false, length = 1000)
+    private String contenuto;
+
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<CommentiEntity> commenti;

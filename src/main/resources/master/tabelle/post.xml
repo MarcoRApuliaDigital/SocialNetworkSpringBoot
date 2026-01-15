@@ -24,6 +24,10 @@
                 <constraints nullable="false"/>
             </column>
 
+            <column name="contenuto" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+
             <column name="numero_condivisioni" type="int">
                 <constraints nullable="false"/>
             </column>

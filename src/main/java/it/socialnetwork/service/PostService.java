@@ -1,11 +1,8 @@
 package it.socialnetwork.service;
 
-import it.socialnetwork.dto.ContenutiPostDTO;
 import it.socialnetwork.dto.PostDTO;
-import it.socialnetwork.entity.ContenutiPostEntity;
 import it.socialnetwork.entity.PostEntity;
 import it.socialnetwork.entity.UtentiEntity;
-import it.socialnetwork.repository.ContenutiPostRepository;
 import it.socialnetwork.repository.PostRepository;
 import it.socialnetwork.repository.UtentiRepository;
 import jakarta.transaction.Transactional;
@@ -21,13 +18,12 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final ContenutiPostRepository contenutiPostRepository;
     private final UtentiRepository utentiRepository;
 
-
-    // Crea un nuovo post con contenuti
+    // Crea un nuovo post
     @Transactional
     public PostDTO creaPost(Long idUtente, PostDTO postDTO) {
+
         UtentiEntity utente = utentiRepository.findById(idUtente)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
@@ -36,30 +32,26 @@ public class PostService {
         post.setDataPubblicazione(LocalDateTime.now());
         post.setNumeroLike(0);
         post.setNumeroCondivisioni(0);
-        postRepository.save(post);
+        post.setContenuto(postDTO.getContenuto());
 
-        // salva contenuti
-        List<ContenutiPostEntity> contenuti = new ArrayList<>();
-        for (ContenutiPostDTO c : postDTO.getContenuti()) {
-            ContenutiPostEntity cp = new ContenutiPostEntity();
-            cp.setPost(post);
-            cp.setTipoContenuto(c.getTipoContenuto());
-            cp.setContenuto(c.getContenuto());
-            contenuti.add(cp);
-        }
-        contenutiPostRepository.saveAll(contenuti);
+        postRepository.save(post);
 
         // prepara DTO da restituire
         postDTO.setIdPost(post.getIdPost());
         postDTO.setIdUtente(idUtente);
         postDTO.setNomeUtente(utente.getNome() + " " + utente.getCognome());
+        postDTO.setDataPubblicazione(post.getDataPubblicazione().toString());
+        postDTO.setNumeroLike(post.getNumeroLike());
+        postDTO.setNumeroCondivisioni(post.getNumeroCondivisioni());
+
         return postDTO;
     }
 
-    //Trasforma una lista di PostEntity in PostDTO
-
+    // Feed
     public List<PostDTO> getFeed(List<PostEntity> posts) {
+
         List<PostDTO> feed = new ArrayList<>();
+
         for (PostEntity post : posts) {
             PostDTO dto = new PostDTO();
             dto.setIdPost(post.getIdPost());
@@ -68,17 +60,11 @@ public class PostService {
             dto.setDataPubblicazione(post.getDataPubblicazione().toString());
             dto.setNumeroLike(post.getNumeroLike());
             dto.setNumeroCondivisioni(post.getNumeroCondivisioni());
+            dto.setContenuto(post.getContenuto());
 
-            List<ContenutiPostDTO> contenutiDTO = new ArrayList<>();
-            for (ContenutiPostEntity cp : post.getContenuti()) {
-                ContenutiPostDTO cDTO = new ContenutiPostDTO();
-                cDTO.setTipoContenuto(cp.getTipoContenuto());
-                cDTO.setContenuto(cp.getContenuto());
-                contenutiDTO.add(cDTO);
-            }
-            dto.setContenuti(contenutiDTO);
             feed.add(dto);
         }
+
         return feed;
     }
 }
