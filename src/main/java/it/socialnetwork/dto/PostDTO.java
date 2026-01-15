@@ -1,5 +1,6 @@
 package it.socialnetwork.dto;
 
+import it.socialnetwork.entity.CommentiEntity;
 import lombok.Data;
 import java.util.List;
 
@@ -13,4 +14,5 @@ public class PostDTO {
     private Integer numeroLike;
     private Integer numeroCondivisioni;
     private List<ContenutiPostDTO> contenuti;
+    private List<CommentiDTO> commenti;
 }
