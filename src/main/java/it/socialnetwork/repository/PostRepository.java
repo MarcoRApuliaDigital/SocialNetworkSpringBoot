@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
 
-    // Trova tutti i post di un utente
+    // Tutti i post di un utente, più recenti prima
     List<PostEntity> findByUtenteOrderByDataPubblicazioneDesc(UtentiEntity utente);
 }

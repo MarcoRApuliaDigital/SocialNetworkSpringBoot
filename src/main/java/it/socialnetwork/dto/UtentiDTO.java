@@ -1,8 +1,5 @@
 package it.socialnetwork.dto;
 
-import it.socialnetwork.entity.CommentiEntity;
-import it.socialnetwork.entity.CredenzialiEntity;
-import it.socialnetwork.entity.PostEntity;
 import it.socialnetwork.enums.SessoEnum;
 import lombok.Data;
 

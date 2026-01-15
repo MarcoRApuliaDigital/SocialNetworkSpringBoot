@@ -1,6 +1,5 @@
 package it.socialnetwork.dto;
 
-import it.socialnetwork.entity.CommentiEntity;
 import lombok.Data;
 import java.util.List;
 
