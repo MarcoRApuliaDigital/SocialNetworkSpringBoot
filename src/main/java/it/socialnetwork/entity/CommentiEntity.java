@@ -23,8 +23,7 @@ public class CommentiEntity {
     @JoinColumn(name = "utente_id", nullable = false)
     private UtentiEntity utente;
 
-    @Column(nullable = false)
-    private String testo;
+    @Column(nullable = false, length = 500)
+    private String contenuto;
 
-    private LocalDateTime dataPubblicazione;
 }

@@ -1,14 +1,12 @@
 package it.socialnetwork.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class CommentiDTO {
-
     private Long idCommento;
-    private Long idPost;
-    private Long idUtente;
-    private String nomeUtente;
-    private String testo;
-    private String dataPubblicazione;
+    private String contenuto;
+    private UtentiDTO utente;   // chi ha scritto il commento
 }

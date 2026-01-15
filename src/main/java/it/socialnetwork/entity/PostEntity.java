@@ -21,12 +21,11 @@ public class PostEntity {
     private UtentiEntity utente;
 
     private LocalDateTime dataPubblicazione;
-    private Integer numeroLike;
-    private Integer numeroCondivisioni;
+    private Integer numeroLike = 0;
+    private Integer numeroCondivisioni = 0;
 
     @Column(nullable = false, length = 1000)
     private String contenuto;
-
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<CommentiEntity> commenti;

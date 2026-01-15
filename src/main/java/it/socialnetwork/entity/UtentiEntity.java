@@ -1,19 +1,17 @@
 package it.socialnetwork.entity;
 
 import it.socialnetwork.enums.SessoEnum;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity(name = "utenti")
 @Data
 @RequiredArgsConstructor
 public class UtentiEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUtente;
@@ -21,17 +19,7 @@ public class UtentiEntity {
     private String nome;
     private String cognome;
     private String email;
-    private LocalDate dataNascita;
-    @Enumerated(EnumType.STRING)
-    private SessoEnum sesso;
-    private LocalDateTime dataCreazione;
-
-    @OneToOne(mappedBy = "utente", cascade = CascadeType.ALL)
-    private CredenzialiEntity credenziali;
-
-    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
-    private List<PostEntity> post;
-
-    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
-    private List<CommentiEntity> commenti;
+    private String username;
+    private String password;
+    private SessoEnum sessoEnum;
 }

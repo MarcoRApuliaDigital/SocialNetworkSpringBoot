@@ -1,40 +1,46 @@
-package it.socialnetwork.controller;
-
-import it.socialnetwork.dto.CredenzialiDTO;
 import it.socialnetwork.dto.UtentiDTO;
 import it.socialnetwork.service.UtentiService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/api/utenti")
-@RequiredArgsConstructor
+@RequestMapping("/utenti")
 public class UtentiController {
 
-    private final UtentiService utentiService;
+    private final UtentiService service;
 
-    // Registrazione
-    @PostMapping("/registrazione")
-    public ResponseEntity<UtentiDTO> registraUtente(@RequestBody UtentiDTO utentiDTO,
-                                                    @RequestBody CredenzialiDTO credenzialiDTO) {
-        UtentiDTO registrato = utentiService.registraUtente(utentiDTO, credenzialiDTO);
-        return ResponseEntity.ok(registrato);
+    @Autowired
+    public UtentiController(UtentiService service) {
+        this.service = service;
     }
 
-    // Login
+    // REGISTRAZIONE
+    @PostMapping("/registra")
+    public ResponseEntity<UtentiDTO> registra(@RequestBody UtentiDTO dto) {
+        UtentiDTO saved = service.registraUtente(dto);
+        return ResponseEntity.ok(saved);
+    }
+
+    // LOGIN
     @PostMapping("/login")
-    public ResponseEntity<UtentiDTO> login(@RequestBody CredenzialiDTO credenzialiDTO) {
-        Optional<UtentiDTO> utente = utentiService.login(credenzialiDTO.getUsername(), credenzialiDTO.getPassword());
-        return utente.map(ResponseEntity::ok).orElse(ResponseEntity.badRequest().build());
+    public ResponseEntity<UtentiDTO> login(@RequestParam String username,
+                                           @RequestParam String password) {
+        UtentiDTO logged = service.login(username, password);
+        return ResponseEntity.ok(logged);
     }
 
-    // Profilo
+    // TROVA UTENTE PER ID
     @GetMapping("/{id}")
-    public ResponseEntity<UtentiDTO> profilo(@PathVariable Long id) {
-        Optional<UtentiDTO> utente = utentiService.trovaUtente(id);
-        return utente.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<UtentiDTO> trovaPerId(@PathVariable Long id) {
+        UtentiDTO dto = service.trovaPerId(id);
+        return ResponseEntity.ok(dto);
+    }
+
+    // ELIMINA UTENTE
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> elimina(@PathVariable Long id) {
+        service.eliminaUtente(id);
+        return ResponseEntity.ok("Utente eliminato con successo");
     }
 }

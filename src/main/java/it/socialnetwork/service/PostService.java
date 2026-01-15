@@ -2,69 +2,55 @@ package it.socialnetwork.service;
 
 import it.socialnetwork.dto.PostDTO;
 import it.socialnetwork.entity.PostEntity;
-import it.socialnetwork.entity.UtentiEntity;
+import it.socialnetwork.mapper.PostMapper;
 import it.socialnetwork.repository.PostRepository;
-import it.socialnetwork.repository.UtentiRepository;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
-    private final UtentiRepository utentiRepository;
+    private final PostMapper mapper = PostMapper.INSTANCE;
 
-    // Crea un nuovo post
-    @Transactional
-    public PostDTO creaPost(Long idUtente, PostDTO postDTO) {
-
-        UtentiEntity utente = utentiRepository.findById(idUtente)
-                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
-
-        PostEntity post = new PostEntity();
-        post.setUtente(utente);
-        post.setDataPubblicazione(LocalDateTime.now());
-        post.setNumeroLike(0);
-        post.setNumeroCondivisioni(0);
-        post.setContenuto(postDTO.getContenuto());
-
-        postRepository.save(post);
-
-        // prepara DTO da restituire
-        postDTO.setIdPost(post.getIdPost());
-        postDTO.setIdUtente(idUtente);
-        postDTO.setNomeUtente(utente.getNome() + " " + utente.getCognome());
-        postDTO.setDataPubblicazione(post.getDataPubblicazione().toString());
-        postDTO.setNumeroLike(post.getNumeroLike());
-        postDTO.setNumeroCondivisioni(post.getNumeroCondivisioni());
-
-        return postDTO;
+    @Autowired
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
     }
 
-    // Feed
-    public List<PostDTO> getFeed(List<PostEntity> posts) {
+    // INSERISCI UN POST
+    public PostDTO inserisciPost(PostDTO dto) {
+        PostEntity entity = mapper.toEntity(dto);
+        entity.setDataPubblicazione(LocalDateTime.now()); // data attuale
+        if (entity.getNumeroLike() == null) entity.setNumeroLike(0);
+        if (entity.getNumeroCondivisioni() == null) entity.setNumeroCondivisioni(0);
+        PostEntity saved = postRepository.save(entity);
+        return mapper.toDTO(saved);
+    }
 
-        List<PostDTO> feed = new ArrayList<>();
+    // TROVA POST PER ID
+    public PostDTO trovaPostPerId(Long id) {
+        return postRepository.findById(id)
+                .map(mapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Post non trovato"));
+    }
 
-        for (PostEntity post : posts) {
-            PostDTO dto = new PostDTO();
-            dto.setIdPost(post.getIdPost());
-            dto.setIdUtente(post.getUtente().getIdUtente());
-            dto.setNomeUtente(post.getUtente().getNome() + " " + post.getUtente().getCognome());
-            dto.setDataPubblicazione(post.getDataPubblicazione().toString());
-            dto.setNumeroLike(post.getNumeroLike());
-            dto.setNumeroCondivisioni(post.getNumeroCondivisioni());
-            dto.setContenuto(post.getContenuto());
+    // TROVA TUTTI I POST
+    public List<PostDTO> trovaTuttiPost() {
+        return postRepository.findAll()
+                .stream()
+                .map(mapper::toDTO).toList();
+    }
 
-            feed.add(dto);
+    // ELIMINA POST
+    public void eliminaPost(Long id) {
+        if (!postRepository.existsById(id)) {
+            throw new RuntimeException("Post non trovato");
         }
-
-        return feed;
+        postRepository.deleteById(id);
     }
 }

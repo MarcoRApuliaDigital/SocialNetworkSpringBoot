@@ -1,94 +1,68 @@
 package it.socialnetwork.service;
 
-import it.socialnetwork.dto.CredenzialiDTO;
 import it.socialnetwork.dto.UtentiDTO;
-import it.socialnetwork.entity.CredenzialiEntity;
 import it.socialnetwork.entity.UtentiEntity;
 import it.socialnetwork.mapper.UtentiMapper;
-import it.socialnetwork.repository.CredenzialiRepository;
 import it.socialnetwork.repository.UtentiRepository;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UtentiService {
 
-    private final UtentiRepository utentiRepository;
-    private final CredenzialiRepository credenzialiRepository;
-    private final UtentiMapper utentiMapper;
+    private final UtentiRepository repository;
+    private final UtentiMapper mapper = UtentiMapper.INSTANCE;
 
-
-    // Registra un nuovo utente con le credenziali.
-    // @param utentiDTO dati dell'utente
-    // @param credenzialiDTO username e password
-    // @return DTO dell'utente registrato con ID
-    @Transactional
-    public UtentiDTO registraUtente(UtentiDTO utentiDTO, CredenzialiDTO credenzialiDTO) {
-
-        //esempio
-
-        UtentiEntity utenteMapper = utentiMapper.toEntity(utentiDTO);
-
-        UtentiEntity utente = new UtentiEntity();
-        utente.setNome(utentiDTO.getNome());
-        utente.setCognome(utentiDTO.getCognome());
-        utente.setEmail(utentiDTO.getEmail());
-        utente.setSesso(utentiDTO.getSesso());
-        //utente.setDataNascita(LocalDate.parse(utentiDTO.getDataNascita()));
-        utente.setDataCreazione(LocalDateTime.now());
-
-        // Crea credenziali
-        CredenzialiEntity credenziali = new CredenzialiEntity();
-        credenziali.setUsername(credenzialiDTO.getUsername());
-        credenziali.setPassword(credenzialiDTO.getPassword());
-        credenziali.setUtente(utente);
-
-        utente.setCredenziali(credenziali);
-
-        utentiRepository.save(utenteMapper);
-
-        utentiDTO.setIdUtente(utente.getIdUtente());
-        return utentiDTO;
+    @Autowired
+    public UtentiService(UtentiRepository repository) {
+        this.repository = repository;
     }
 
-    // Login: controlla username e password
-
-    public Optional<UtentiDTO> login(String username, String password) {
-        Optional<CredenzialiEntity> cred = credenzialiRepository.findByUsername(username);
-        if (cred.isPresent() && cred.get().getPassword().equals(password)) {
-            UtentiEntity u = cred.get().getUtente();
-            UtentiDTO dto = new UtentiDTO();
-            dto.setIdUtente(u.getIdUtente());
-            dto.setNome(u.getNome());
-            dto.setCognome(u.getCognome());
-            dto.setEmail(u.getEmail());
-            dto.setSesso(u.getSesso());
-            //dto.setDataNascita(u.getDataNascita().toString());
-            return Optional.of(dto);
+    // REGISTRAZIONE
+    public UtentiDTO registraUtente(UtentiDTO dto) {
+        // Controllo username già esistente
+        if (repository.existsByUsername(dto.getUsername())) {
+            throw new RuntimeException("Username già esistente");
         }
-        return Optional.empty();
+
+        // Controllo email già esistente
+        if (repository.existsByEmail(dto.getEmail())) {
+            throw new RuntimeException("Email già esistente");
+        }
+
+        // Salvo entity
+        UtentiEntity entity = mapper.toEntity(dto);
+        UtentiEntity saved = repository.save(entity);
+
+        // Ritorno DTO
+        return mapper.toDTO(saved);
     }
 
+    // LOGIN
+    public UtentiDTO login(String username, String password) {
+        UtentiEntity entity = repository.findByUsername(username);
+        if (entity == null || !entity.getPassword().equals(password)) {
+            throw new RuntimeException("Username o password errati");
+        }
+        return mapper.toDTO(entity);
+    }
 
-    // Trova un utente per ID
+    // TROVA UTENTE PER ID
+    public UtentiDTO trovaPerId(Long id) {
+        Optional<UtentiEntity> optional = repository.findById(id);
+        if (optional.isEmpty()) {
+            throw new RuntimeException("Utente non trovato");
+        }
+        return mapper.toDTO(optional.get());
+    }
 
-    public Optional<UtentiDTO> trovaUtente(Long idUtente) {
-        Optional<UtentiEntity> utenteOpt = utentiRepository.findById(idUtente);
-        if (!utenteOpt.isPresent()) return Optional.empty();
-
-        UtentiEntity u = utenteOpt.get();
-        UtentiDTO dto = new UtentiDTO();
-        dto.setIdUtente(u.getIdUtente());
-        dto.setNome(u.getNome());
-        dto.setCognome(u.getCognome());
-        dto.setEmail(u.getEmail());
-        dto.setSesso(u.getSesso());
-       // dto.setDataNascita(u.getDataNascita().toString());
-        return Optional.of(dto);
+    // ELIMINA UTENTE
+    public void eliminaUtente(Long id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Utente non trovato");
+        }
+        repository.deleteById(id);
     }
 }

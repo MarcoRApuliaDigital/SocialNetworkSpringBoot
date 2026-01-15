@@ -4,15 +4,14 @@ import it.socialnetwork.entity.UtentiEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
 public interface UtentiRepository extends JpaRepository<UtentiEntity, Long> {
+    // Metodo per trovare un utente per username (utile per login)
+    UtentiEntity findByUsername(String username);
 
-    // Ricerca utente per email
-    Optional<UtentiEntity> findByEmail(String email);
+    // Metodo per controllare se un username esiste già
+    boolean existsByUsername(String username);
 
-    // Ricerca utenti per nome e cognome
-    List<UtentiEntity> findByNomeAndCognome(String nome, String cognome);
+    // Metodo per controllare se un'email esiste già
+    boolean existsByEmail(String email);
 }

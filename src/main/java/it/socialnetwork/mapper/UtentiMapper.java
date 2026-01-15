@@ -3,9 +3,15 @@ package it.socialnetwork.mapper;
 import it.socialnetwork.dto.UtentiDTO;
 import it.socialnetwork.entity.UtentiEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring", uses = {PostMapper.class, CommentiMapper.class, CredenzialiMapper.class})
+@Mapper
 public interface UtentiMapper {
-    UtentiDTO toDto(UtentiEntity utentiEntity);
+    UtentiMapper INSTANCE = Mappers.getMapper(UtentiMapper.class);
+
+    // Entity -> DTO
+    UtentiDTO toDTO(UtentiEntity utentiEntity);
+
+    // DTO -> Entity
     UtentiEntity toEntity(UtentiDTO utentiDTO);
 }
