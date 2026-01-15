@@ -14,10 +14,12 @@ public class UtentiDTO {
     private String nome;
     private String cognome;
     private String email;
+    private String password;
     private SessoEnum sesso;
     private LocalDateTime dataCreazione;
-    private LocalDate dataNascita; // String per JSON
-    private CredenzialiDTO credenziali;
+    private LocalDate dataNascita;
+
+    //Relazioni
     private List<PostDTO> post;
     private List<CommentiDTO> commenti;
 }
