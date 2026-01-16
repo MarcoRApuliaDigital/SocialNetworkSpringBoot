@@ -42,4 +42,15 @@ public class UtentiService {
         return utentiRepository.findById(idUtente)
                 .map(utentiMapper::toDto);
     }
+
+    // Elimina un utente per ID
+    @Transactional
+    public boolean eliminaUtente(Long idUtente) {
+        if (!utentiRepository.existsById(idUtente)) {
+            return false;
+        }
+
+        utentiRepository.deleteById(idUtente);
+        return true;
+    }
 }

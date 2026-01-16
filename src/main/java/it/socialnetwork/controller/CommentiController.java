@@ -30,4 +30,14 @@ public class CommentiController {
         List<CommentiDTO> commenti = commentiService.getCommentiPost(idPost);
         return ResponseEntity.ok(commenti);
     }
+
+    // Elimina commento
+    @DeleteMapping("delete/{idCommento}")
+    public ResponseEntity<Void> eliminaCommento(@PathVariable Long idCommento) {
+        boolean eliminato = commentiService.eliminaCommento(idCommento);
+
+        return eliminato
+                ? ResponseEntity.noContent().build()   // 204
+                : ResponseEntity.notFound().build();   // 404
+    }
 }
