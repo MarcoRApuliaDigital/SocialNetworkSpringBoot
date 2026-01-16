@@ -28,8 +28,6 @@ public class UtentiController {
     @PostMapping("/login")
     public ResponseEntity<UtentiDTO> login(@RequestBody UtentiDTO loginDTO) {
         Optional<UtentiDTO> utente = utentiService.login(loginDTO.getEmail(), loginDTO.getPassword());
-
-
         return utente.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -40,5 +38,17 @@ public class UtentiController {
         Optional<UtentiDTO> utente = utentiService.trovaUtente(id);
         return utente.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Elimina utente
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> eliminaUtente(@PathVariable Long id) {
+        boolean eliminato = utentiService.eliminaUtente(id);
+
+        if (eliminato) {
+            return ResponseEntity.noContent().build(); // 204
+        } else {
+            return ResponseEntity.notFound().build(); // 404
+        }
     }
 }

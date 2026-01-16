@@ -67,4 +67,16 @@ public class PostService {
 
         return feed;
     }
+
+    // Elimina post
+    @Transactional
+    public boolean eliminaPost(Long idPost) {
+
+        if (!postRepository.existsById(idPost)) {
+            return false;
+        }
+
+        postRepository.deleteById(idPost);
+        return true;
+    }
 }

@@ -24,7 +24,7 @@ public class CommentiService {
     private final UtentiRepository utentiRepository;
 
 
-     // Aggiunge un commento a un post
+    // Aggiunge un commento a un post
     @Transactional
     public CommentiDTO aggiungiCommento(Long idPost, Long idUtente, CommentiDTO commentiDTO) {
         PostEntity post = postRepository.findById(idPost)
@@ -51,7 +51,7 @@ public class CommentiService {
     }
 
 
-     // Recupera tutti i commenti di un post
+    // Recupera tutti i commenti di un post
 
     public List<CommentiDTO> getCommentiPost(Long idPost) {
         PostEntity post = postRepository.findById(idPost)
@@ -72,5 +72,16 @@ public class CommentiService {
         }
 
         return commentiDTOList;
+    }
+
+    // Elimina commento
+    @Transactional
+    public boolean eliminaCommento(Long idCommento) {
+        if (!commentiRepository.existsById(idCommento)) {
+            return false;
+        }
+
+        commentiRepository.deleteById(idCommento);
+        return true;
     }
 }

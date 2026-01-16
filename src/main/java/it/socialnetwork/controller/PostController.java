@@ -32,4 +32,13 @@ public class PostController {
         List<PostDTO> feed = postService.getFeed(posts);
         return ResponseEntity.ok(feed);
     }
+
+    // Elimina post
+    @DeleteMapping("delete/{idPost}")
+    public ResponseEntity<Void> eliminaPost(@PathVariable Long idPost) {
+        boolean eliminato = postService.eliminaPost(idPost);
+        return eliminato
+                ? ResponseEntity.noContent().build()   // 204
+                : ResponseEntity.notFound().build();   // 404
+    }
 }

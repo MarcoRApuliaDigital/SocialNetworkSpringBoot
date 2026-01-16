@@ -31,7 +31,7 @@ public class UtentiEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false) //Per Salvatore: Ho aggiunto qua la password
+    @Column(nullable = false)
     private String password;
 
 
