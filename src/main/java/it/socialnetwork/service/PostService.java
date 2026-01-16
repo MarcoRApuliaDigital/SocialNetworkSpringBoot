@@ -41,7 +41,7 @@ public class PostService {
         postDTO.setIdUtente(idUtente);
         postDTO.setNomeUtente(utente.getNome() + " " + utente.getCognome());
         postDTO.setDataPubblicazione(post.getDataPubblicazione().toString());
-        postDTO.setNumeroLike(post.getNumeroLike());
+        postDTO.setNumeroLike(post.getNumeroLike()+1);
         postDTO.setNumeroCondivisioni(post.getNumeroCondivisioni());
 
         return postDTO;
